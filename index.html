@@ -87,15 +87,14 @@ body{margin:0}
   <div id="sizePanel" hidden></div>
 
   <div class="order">
-    <div class="ttl"><span>Bring off the truck</span><button class="btn small" id="clearBtn" type="button">Clear</button></div>
+    <div class="ttl"><span>Please bring us</span><button class="btn small" id="clearBtn" type="button">Clear</button></div>
     <div id="orderList"></div>
   </div>
 
   <details id="setup">
-    <summary>Who gets the text</summary>
+    <summary>Phone number (optional)</summary>
     <div class="in">
-      <div><label for="sName">Name</label><input type="text" id="sName" placeholder="Name"></div>
-      <div><label for="sPhone">Phone number</label><input type="tel" id="sPhone" inputmode="tel" placeholder="402-555-0123"></div>
+      <div><label for="sPhone">Phone number (optional)</label><input type="tel" id="sPhone" inputmode="tel" placeholder="402-555-0123"></div>
     </div>
   </details>
 
@@ -208,8 +207,7 @@ window.addEventListener('load',function(){
   }
   function message(){
     var L=lines(); if(!L.length) return '';
-    var head=(S.name?('Hey '+S.name+', please'):'Please')+' bring off the truck:';
-    return head+'\n\n'+L.map(function(l){return '- '+l.n+' x '+l.text;}).join('\n');
+    return 'Please bring us:\n\n'+L.map(function(l){return '- '+l.n+' x '+l.text;}).join('\n')+'\n\nThanks\nJim Molt';
   }
 
   function renderOrder(){
@@ -238,7 +236,6 @@ window.addEventListener('load',function(){
   function flash(t){ var s=$('status'); s.textContent=t; setTimeout(function(){ if(s.textContent===t) s.textContent=''; },4000); }
   $('smsLink').onclick=function(e){
     if(!message()){ e.preventDefault(); flash('Pick at least one cylinder first.'); return; }
-    if(!S.phone){ flash('Add his number under "Who gets the text" so Messages knows who to text.'); }
   };
   $('copyBtn').onclick=function(){
     var m=message(); if(!m){ flash('Pick at least one cylinder first.'); return; }
@@ -246,10 +243,8 @@ window.addEventListener('load',function(){
     catch(e){ flash('Copy was blocked here.'); }
   };
   $('clearBtn').onclick=function(){ S.order={}; save(); render(); };
-  $('sName').value=S.name; $('sPhone').value=S.phone;
-  $('sName').addEventListener('input',function(){ S.name=this.value; save(); renderSend(); });
+  $('sPhone').value=S.phone;
   $('sPhone').addEventListener('input',function(){ S.phone=this.value; save(); renderSend(); });
-  if(!S.phone) $('setup').open=true;
   render();
 })();
 </script>
